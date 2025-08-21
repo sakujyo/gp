@@ -300,6 +300,8 @@ function _gen(n, il = 0, decorator) {
 			return `export default ${gen(n.declaration)}`
 		case 'TaggedTemplateExpression':
 			return `${gen(n.tag)}${gen(n.quasi)}`
+		case 'DebuggerStatement':
+			return 'debugger'
 		default:
 			return `not implemented(${n?.type})${(decorator ? '<br>' : '\n')}${JSON.stringify(n, null, 8)}`
 			break
