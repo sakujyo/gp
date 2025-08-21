@@ -46,44 +46,46 @@ async function getGithubSrc(url) {
 }
 
 const querystring = document.location.href.split('?')
-const vresult = v(decorator1, (querystring[1] ? await getGithubSrc(querystring[1]): srcgen)
-	.replace(/\r/g, '')
-	.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
-)
-const asobj = [ vresult.length, ((i) => vresult.slice(i, Math.min(vresult.length, i + 60)))(Math.floor(vresult.length / 2)) ]
-console.log(asobj)
-setsrc(vresult)
+void (async function main() {
+	const vresult = v(decorator1, (querystring[1] ? await getGithubSrc(querystring[1]): srcgen)
+		.replace(/\r/g, '')
+		.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
+	)
+	const asobj = [ vresult.length, ((i) => vresult.slice(i, Math.min(vresult.length, i + 60)))(Math.floor(vresult.length / 2)) ]
+	console.log(asobj)
+	setsrc(vresult)
 
-setTimeout(() => {
-	void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
-}, 99)
+	setTimeout(() => {
+		void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
+	}, 99)
 
-setTimeout(() => {
-	observer = new IntersectionObserver(entries => {
-		const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-		async function raf(timestamp) {
-			await sleep((((timestamp - Math.floor(timestamp)) * 1000 * 10) % 667) / 10)
+	setTimeout(() => {
+		observer = new IntersectionObserver(entries => {
+			const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+			async function raf(timestamp) {
+				await sleep((((timestamp - Math.floor(timestamp)) * 1000 * 10) % 667) / 10)
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.style.animationIterationCount = 'infinite'
+					} else
+						entry.target.style.animationIterationCount = 1
+				});
+			}
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
-					entry.target.style.animationIterationCount = 'infinite'
-				} else
+					entry.target.style.animationIterationCount = 'infinite' 
+				}
+				else {
 					entry.target.style.animationIterationCount = 1
-			});
-		}
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				entry.target.style.animationIterationCount = 'infinite' 
-			}
-			else {
-				entry.target.style.animationIterationCount = 1
-			}
-		})
-	}, { threshold: 0 });
+				}
+			})
+		}, { threshold: 0 });
 
-	for (let i = 0; i < 7; i++) {
-		document.querySelectorAll(`.gr${i}`).forEach(el => observer.observe(el));
-	}
-}, 500)
+		for (let i = 0; i < 7; i++) {
+			document.querySelectorAll(`.gr${i}`).forEach(el => observer.observe(el));
+		}
+	}, 500)
+})()
 
 var idcolor = 'white'
 
