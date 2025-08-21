@@ -24,13 +24,13 @@ function decorator1(text, className, stylingcolor=true, indent = false, borderco
 
 const declmap = new Map()
 function v(decorator1, targetsrc) {
-	ast = parse(targetsrc, {
+	ast = parse(targetsrc.replace(/</g, '</**/'), {
 		srcType: 'Module',
 		errorRecovery: true,
 	})
 	decl=[],ref=[]
 	void [...trav(ast)]
-	return gen(ast)
+	return gen(ast).replace(/<\/\s?\*\*\s?\/()/g, '&lt;')
 }
 
 function declpush(...args) {
@@ -306,4 +306,14 @@ function _gen(n, il = 0, decorator) {
 			return `not implemented(${n?.type})${(decorator ? '<br>' : '\n')}${JSON.stringify(n, null, 8)}`
 			break
 	}
+}
+
+function exportsrc() {
+	const fs = require('fs')
+	fs.writeFileSync('./srcgen.mjs',
+		`var srcgen=${
+			JSON.stringify(fs.readFileSync('/p/twagent/timeline2mediajson/app/jpara/janpara.mjs').toString()
+			)
+		}`
+	)
 }
