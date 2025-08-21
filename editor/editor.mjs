@@ -2,7 +2,6 @@ const fps = 15
 var maploc2i = new Map()
 var tabstep = 4
 
-
 const [ container, containercode, buttons, output ] = (function (l) {
 	return l.map(x => creatediv(x))
 })([ 'container', 'containercode', 'buttons', 'output' ])
@@ -37,7 +36,17 @@ sheet.replaceSync(`body {
 }`)
 
 const fontwidth = getFontWidth('c')
-const vresult = v(decorator1, srcgen //srcgen //psrc
+
+function translateToAllowOriginURL(s) {
+    return s.replace('github', 'raw.githubusercontent').replace('raw/refs', 'refs')
+}
+async function getGithubSrc(url) {
+	const res = await fetch(translateToAllowOriginURL(url))
+	return await res.text()
+}
+
+const querystring = document.location.href.split('?')
+const vresult = v(decorator1, querystring[1] ? getGithubSrc(querystring[1]): srcgen
 	.replace(/\r/g, '')
 	.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
 )
@@ -48,7 +57,6 @@ setsrc(vresult)
 setTimeout(() => {
 	void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
 }, 99)
-
 
 setTimeout(() => {
 	observer = new IntersectionObserver(entries => {
@@ -76,8 +84,6 @@ setTimeout(() => {
 		document.querySelectorAll(`.gr${i}`).forEach(el => observer.observe(el));
 	}
 }, 500)
-
-
 
 var idcolor = 'white'
 
@@ -161,117 +167,6 @@ function generateanimation(n) {
 95.35%{background-color:hsl(320,100%,50%);}
 97.67%{background-color:hsl(340,100%,50%);}
 100%{background-color:hsl(0,100%,50%);}}`
-
-  /*animation: colorChange${n} 6s steps(3, end) infinite;*/
-  /*animation: hueRotate 6s linear infinite;*/
-  /*animation: hueRotate${n} 360s steps(4, end) infinite;*/
-  /*animation: hueRotate${n} 1s steps(4, end) infinite;*/
-  /*animation: hueRotate${n} 20s steps(25, end) infinite;*/
-
-	
-    /* background-color: hsl(var(--hue${n}), 100%, calc(
-		42% + 8% * clamp(0, 
-0.5			
-			, 1)
-
-		));*/
-/*
-    animation: hueChange${n} 1s linear infinite;
-}
-
-  @keyframes hueChange${n} {
-    0% {
-      --hue${n}: ${initialHue + 0};
-        --lightness${n}: calc(
-		42 + 8 * clamp(0, 
-			min(
-				abs((var(--hue${n}) - 75) / 15),
-				abs((var(--hue${n}) - 165) / 20)
-			)
-			, 1)
-
-		);
-    }
-      --hue${n}: ${initialHue + 50};
-        --lightness${n}: calc(
-		42 + 8 * clamp(0, 
-			min(
-				abs((var(--hue${n}) - 75) / 15),
-				abs((var(--hue${n}) - 165) / 20)
-			)
-			, 1)
-
-		);
-    }
-      --hue${n}: ${initialHue + 120};
-        --lightness${n}: calc(
-		42 + 8 * clamp(0, 
-			min(
-				abs((var(--hue${n}) - 75) / 15),
-				abs((var(--hue${n}) - 165) / 20)
-			)
-			, 1)
-
-		);
-    }
-      --hue${n}: ${initialHue + 190};
-        --lightness${n}: calc(
-		42 + 8 * clamp(0, 
-			min(
-				abs((var(--hue${n}) - 75) / 15),
-				abs((var(--hue${n}) - 165) / 20)
-			)
-			, 1)
-
-		);
-    }
-    100% {
-      --hue${n}: ${initialHue + 360};
-        --lightness${n}: calc(
-		42 + 8 * clamp(0, 
-			min(
-				abs((var(--hue${n}) - 75) / 15),
-				abs((var(--hue${n}) - 165) / 20)
-			)
-			, 1)
-		);
-    }
-  }
-
-@keyframes hueRotate${n} {
-  0% {
-    background-color: hsl(${starthue + 0}, 100%, calc(50% - 40% * clamp(0, abs(var(--hue) - 135) / (135 - 70) , 1)));
-  }
-
-  50% {
-    background-color: hsl(${starthue + 180}, 100%, calc(50% - 40% * clamp(0, abs(var(--hue) - 135) / (135 - 70) , 1)));
-  }
-
-  100% {
-    background-color: hsl(${starthue + 360}, 100%, calc(50% - 40% * clamp(0, abs(var(--hue) - 135) / (135 - 70) , 1)));
-  }
-}
-`
-*/
-
-
-
-
-/*
-@keyframes colorChange${n} {
-  0% {
-    background-color: ${startcolor};
-  }
-  33% {
-    background-color: ${randomcolor()};
-  }
-  66% {
-    background-color: ${randomcolor()};
-  }
-  100% {
-    background-color: ${startcolor};
-  }
-}*/
 }
 
 function rainbow(n) {
@@ -286,8 +181,6 @@ function rainbow(n) {
 }
 var tickCount = 0
 const preparedStylesCount = 12
-
-
 
 var idsheet = new CSSStyleSheet()
 idsheet.replaceSync(Object.keys([...Array(7)]).map(x => generateanimation(parseInt(x))).join('\n'))
@@ -332,8 +225,6 @@ const cl = [ '#f57', '#b7f', '#4e8', '#fe2', '#17f', ]
 function c() {
 	return cl[Math.floor(Math.random() * cl.length)]
 }
-
-
 
 function setsrc(src) {
 	containercode.innerHTML = src
