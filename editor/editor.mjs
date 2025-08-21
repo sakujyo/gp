@@ -46,7 +46,7 @@ async function getGithubSrc(url) {
 }
 
 const querystring = document.location.href.split('?')
-const vresult = v(decorator1, querystring[1] ? await getGithubSrc(querystring[1]): srcgen
+const vresult = v(decorator1, (querystring[1] ? await getGithubSrc(querystring[1]): srcgen)
 	.replace(/\r/g, '')
 	.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
 )
