@@ -58,6 +58,8 @@ void (async function main() {
 	setsrc(vresult)
 
 	output.innerText = decl.filter(x => x.category === 'function').map(x => [ x.name, x.loc.start.line, x.loc.start.column ]).join('\n')
+		+ Object.values(Object.groupBy(ref.map(x => [`${x.id.name}: (${x.id.loc.start.line}, ${x.id.loc.start.column}) -> ${x.decl?.name}: (${x.decl?.loc.start.line}, ${x.decl?.loc.start.column})`, x.decl?.start]), l => l[1])).flatMap(x => x).map(x => x[0]+'\n').join('')
+
 	//setTimeout(() => {
 	//	void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
 	//}, 99)
