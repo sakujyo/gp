@@ -256,9 +256,7 @@ function evalfunc(src, onlysyntaxcheck=false) {
 		containercode.innerHTML = v(decorator1, src
 			.replace(/\r/g, '')
 			.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
-			.replace(/</g, '</*HTMLTAGOPENINGLESSTHANSYMBOLLETTERESCAPINGMARKER*/')
 		)
-			.replace(/<(\s*)\/\*HTMLTAGOPENINGLESSTHANSYMBOLLETTERESCAPINGMARKER\*\/()/g, '&lt;$1')
 	} catch (err) {
 		console.log(err)
 		containercode.innerHTML = containercode.innerHTML.replace('eva' + 'L',
