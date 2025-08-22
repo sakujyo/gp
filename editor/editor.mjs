@@ -211,7 +211,7 @@ containercode.addEventListener('compositionend',  (e) => {
 	if (e.data.match(/関数$/)) {
 		const el = e.target
 		const m = el.innerText.match(/関数/)
-		if (m) evalfunc(el.innerText.replace(/関数/, 'function _() {\n}', true)
+		if (m) evalfunc(el.innerText.replace(/関数/, 'function _() {\n}', true))
 	}
 })
 
