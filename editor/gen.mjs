@@ -287,15 +287,18 @@ function _gen(n, il = 0, decorator) {
 		case 'DirectiveLiteral':
 			return `"${n.value}";`
 		case 'ImportDeclaration':
-			return `import ${n.specifiers.map(x => gen(x)).join('')} from ${gen(n.source)}`
+			if (n.specifiers[0].type === 'ImportDefaultSpecifier')
+				return `import ${gen(n.specifiers[0])} from ${gen(n.source)}`
+			else
+				return `import { ${n.specifiers.map(x => gen(x)).join(', ')} } from ${gen(n.source)}`
 		case 'ImportNamespaceSpecifier':
 			return `* as ${gen(n.local)}`
 		case 'ImportDefaultSpecifier':
 			return `${gen(n.local)}`
 		case 'ImportSpecifier':
 			return n.local.name === n.imported.name ?
-				`{ ${gen(n.local)} }` :
-				`{ ${gen(n.imported)} as ${gen(n.local)} }`
+				`${gen(n.local)}` :
+				`${gen(n.imported)} as ${gen(n.local)}`
 		case 'ExportDefaultDeclaration':
 			return `export default ${gen(n.declaration)}`
 		case 'TaggedTemplateExpression':
