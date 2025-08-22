@@ -287,7 +287,7 @@ function _gen(n, il = 0, decorator) {
 		case 'DirectiveLiteral':
 			return `"${n.value}";`
 		case 'ImportDeclaration':
-			return `import ${n.specifiers.map(x => gen(x)).join('')} from '${gen(n.source)}'`
+			return `import ${n.specifiers.map(x => gen(x)).join('')} from ${gen(n.source)}`
 		case 'ImportNamespaceSpecifier':
 			return `* as ${gen(n.local)}`
 		case 'ImportDefaultSpecifier':
