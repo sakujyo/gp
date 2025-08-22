@@ -37,11 +37,12 @@ sheet.replaceSync(`body {
 
 const fontwidth = getFontWidth('c')
 
-function translateToAllowOriginURL(s) {
-    return s.replace('github', 'raw.githubusercontent').replace('raw/refs', 'refs')
+function translateToAccessibleURL(s) {
+	// For smartphones, githubusercontent url tends to be retrieved
+    return !s.match(/raw\/refs/) ? s : s.replace('github', 'raw.githubusercontent').replace('raw/refs', 'refs')
 }
 async function getGithubSrc(url) {
-	const res = await fetch(translateToAllowOriginURL(url))
+	const res = await fetch(translateToAccessibleURL(url))
 	return await res.text()
 }
 
