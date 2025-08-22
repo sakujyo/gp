@@ -6,10 +6,12 @@ function rc() {
 }
 
 const esclt = 'xx鱚閖鯏xx'
+const escgt = 'vv鯏閖鱚vv'
 const regexpesclt = RegExp(esclt, 'g')
+const regexpescgt = RegExp(escgt, 'g')
 function decorator1(text, className, stylingcolor=true, indent = false, bordercolor=false) {
 	if (className !== 'func') {
-		return `${esclt}span class="${className}">${text}${esclt}/span>`
+		return `${esclt}span class="${className}"${escgt}${text}${esclt}/span${escgt}`
 	}
 
 	if (className === 'func') {
@@ -20,7 +22,7 @@ function decorator1(text, className, stylingcolor=true, indent = false, borderco
 			+ '"'
 		return `${esclt}div class="${className}"${style}${
 			isContainer ? ' contenteditable' : ''
-		}>${text}${esclt}/div>`
+		}${escgt}${text}${esclt}/div${escgt}`
 	}
 }
 
@@ -34,7 +36,9 @@ function v(decorator1, targetsrc) {
 	void [...trav(ast)]
 	return gen(ast)
 		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
 		.replace(regexpesclt, '<')
+		.replace(regexpescgt, '>')
 }
 
 function declpush(...args) {
@@ -116,7 +120,7 @@ function gen(n, il = 0, decorator=decorator1) {
 }
 
 function _gen(n, il = 0, decorator) {
-	const newline = decorator ? `${esclt}br>` : '\n'
+	const newline = decorator ? `${esclt}br${escgt}` : '\n'
 	const df = (...args) => (x) => decorator ? decorator(x, ...args) : x
 	switch (n.type){
 		case 'File':
@@ -191,7 +195,7 @@ function _gen(n, il = 0, decorator) {
 				n.generator ? '* ' : ''}${
 				n.computed ? `[${gen(n.key)}]` : `${gen(n.key)}`}(${
 				n.params.map(x => gen(x)).join(', ')}) ${
-				gen(n.body, il + 1)}${newline}`)
+					gen(n.body, il + 1)}${newline}`)
 		case 'Super':
 			return 'super'
 		case 'ThisExpression':
