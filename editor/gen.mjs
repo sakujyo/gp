@@ -105,6 +105,9 @@ function* trav(n, depth=0) {
 				case 'ArrayPattern':
 					declpush(...e.elements.filter(x => x))
 					break
+				case 'CatchClause':
+					declpush(e.param)
+					break
 				default:
 					break
 			}
