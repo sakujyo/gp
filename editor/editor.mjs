@@ -260,7 +260,7 @@ function evalfunc(src, onlysyntaxcheck=false) {
 		)
 	} catch (err) {
 		console.log(err)
-		containercode.innerHTML = containercode.innerHTML.replace('eva' + 'L',
+		containercode.innerHTML = containercode.innerHTML.replace(onlysyntaxcheck ? ':s' : ':eva',
 			`<div style="white-space: pre;">${err}</div>`
 		)
 	}
