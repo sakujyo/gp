@@ -5,9 +5,11 @@ function rc() {
 	return `#${f()}${f()}${f()}`
 }
 
+const esclt = 'xx鱚閖鯏xx'
+const regexpesclt = RegExp(esclt, 'g')
 function decorator1(text, className, stylingcolor=true, indent = false, bordercolor=false) {
 	if (className !== 'func') {
-		return `<span class="${className}">${text}</span>`
+		return `${esclt}span class="${className}">${text}${esclt}/span>`
 	}
 
 	if (className === 'func') {
@@ -16,21 +18,23 @@ function decorator1(text, className, stylingcolor=true, indent = false, borderco
 			+ (isContainer ? ` background-color: ${rc()};` : '')
 			+ (indent ? ` margin-left: ${fontwidth * tabstep}px;` : '')
 			+ '"'
-		return `<div class="${className}"${style}${
+		return `${esclt}div class="${className}"${style}${
 			isContainer ? ' contenteditable' : ''
-		}>${text}</div>`
+		}>${text}${esclt}/div>`
 	}
 }
 
 const declmap = new Map()
 function v(decorator1, targetsrc) {
-	ast = parse(targetsrc.replace(/\/\*.*?\*\/()/gs, '').replace(/<(?!=)/g, '</**/'), {
+	ast = parse(targetsrc.replace(/\/\*.*?\*\/()/gs, ''), {
 		sourceType: 'module',
 		errorRecovery: true,
 	})
 	decl=[],ref=[]
 	void [...trav(ast)]
-	return gen(ast).replace(/<\/\s?\*\*\s?\/()/g, '&lt;')
+	return gen(ast)
+		.replace(/</g, '&lt;')
+		.replace(regexpesclt, '<')
 }
 
 function declpush(...args) {
@@ -93,35 +97,35 @@ function* trav(n, depth=0) {
 					break
 				default:
 					break
-
-
-
 			}
-
 
 			yield* trav(e, depth + 1)
 		}
 	}
 }
 
+
 function parenthesize(n, s) {
 	return n.extra?.parenthesized ? `(${s})` : s
 }
+
 function gen(n, il = 0, decorator=decorator1) {
 	return `${n.leadingComments ? n.leadingComments.map(x => gen(x)
 	).join('') : ''}`
 		+ parenthesize(n, _gen(n, il, decorator))
 }
+
 function _gen(n, il = 0, decorator) {
+	const newline = decorator ? `${esclt}br>` : '\n'
 	const df = (...args) => (x) => decorator ? decorator(x, ...args) : x
 	switch (n.type){
 		case 'File':
 			return gen(n.program)
 		case 'Program':
 			return [
-				n.directives.map(x => gen(x)).join((decorator ? '<br>' : '\n')),
-				n.body.map(x => df('func')(gen(x))).join((decorator ? '<br>' : '\n')),
-			].join((decorator ? '<br>' : '\n'))
+				n.directives.map(x => gen(x)).join(newline),
+				n.body.map(x => df('func')(gen(x))).join(decorator ? '' : '\n'),
+			].join(newline)
 		case 'ExpressionStatement':
 			return gen(n.expression, il)
 		case 'BinaryExpression':
@@ -160,7 +164,7 @@ function _gen(n, il = 0, decorator) {
 				n.id ? gen(n.id) : ''}(${
 					n.params.map(x => gen(x)).join(', ')}) => ${gen(n.body, il + 0)}`
 		case 'BlockStatement':
-			return `{${(decorator ? '<br>' : '\n')}${df('func', true, true)(n.body.map(x => `${gen(x, il)}${(decorator ? '<br>' : '\n')}`).join(''))}}`
+			return `{${newline}${df('func', true, true)(n.body.map(x => `${gen(x, il)}${newline}`).join(''))}}`
 		case 'ReturnStatement':
 			return `${df('return')('return' + (n.argument ? ' ' : ''))}${n.argument ? gen(n.argument, il) : ''}`
 		case 'AssignmentPattern':
@@ -182,12 +186,12 @@ function _gen(n, il = 0, decorator) {
 		case 'ObjectMethod':
 			return df('func', true, true)(`${
 				n.static ? 'static ' : ''}${
-					n.async ? 'async ' : ''}${
-						n.kind !== 'method' && n.kind !== 'constructor' ? `${n.kind} ` : ''}${
-							n.generator ? '* ' : ''}${
-								n.computed ? `[${gen(n.key)}]` : `${gen(n.key)}`}(${
-									n.params.map(x => gen(x)).join(', ')}) ${
-										gen(n.body, il + 1)}${(decorator ? '<br>' : '\n')}`)
+				n.async ? 'async ' : ''}${
+				n.kind !== 'method' && n.kind !== 'constructor' ? `${n.kind} ` : ''}${
+				n.generator ? '* ' : ''}${
+				n.computed ? `[${gen(n.key)}]` : `${gen(n.key)}`}(${
+				n.params.map(x => gen(x)).join(', ')}) ${
+				gen(n.body, il + 1)}${newline}`)
 		case 'Super':
 			return 'super'
 		case 'ThisExpression':
@@ -222,10 +226,10 @@ function _gen(n, il = 0, decorator) {
 		case 'ForInStatement':
 			return `for ${n.await ? 'await ' : ''}(${gen(n.left)} in ${gen(n.right)}) ${gen(n.body, il + 1)}`
 		case 'SwitchStatement':
-			return df('func')(`switch (${gen(n.discriminant)}) {${(decorator ? '<br>': '\n')}${n.cases.map(x => gen(x, il + 1)).join('')}}`)
+			return df('func')(`switch (${gen(n.discriminant)}) {${newline}${n.cases.map(x => gen(x, il + 1)).join('')}}`)
 		case 'SwitchCase':
-			return df('func')(`${ n.test ? `case ${gen(n.test)}:${(decorator ? '<br>' : '\n')}` : `default:${(decorator ? '<br>' : '\n')}` }${
-				df('func', true, true)(n.consequent.map(x => gen(x, il) + (decorator ? '<br>' : '\n')).join(''))
+			return df('func')(`${ n.test ? `case ${gen(n.test)}:${newline}` : `default:${newline}` }${
+				df('func', true, true)(n.consequent.map(x => gen(x, il) + newline).join(''))
 			}`)
 		case 'BreakStatement':
 			return 'break'
@@ -281,7 +285,7 @@ function _gen(n, il = 0, decorator) {
 		case 'CommentBlock':
 			return `/*${n.value}*/`
 		case 'CommentLine':
-			return `//${n.value}${(decorator ? '<br>' : '\n')}`
+			return `//${n.value}${newline}`
 		case 'Directive':
 			return gen(n.value)
 		case 'DirectiveLiteral':
@@ -312,7 +316,7 @@ function _gen(n, il = 0, decorator) {
 		case 'ExportSpecifier':
 			return `{ ${gen(n.local)} as ${gen(n.exported)} }`
 		default:
-			return `not implemented(${n?.type})${(decorator ? '<br>' : '\n')}${JSON.stringify(n, null, 8)}`
+			return `not implemented(${n?.type})${newline}${JSON.stringify(n, null, 8)}`
 			break
 	}
 }
