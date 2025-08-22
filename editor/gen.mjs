@@ -34,6 +34,13 @@ function v(decorator1, targetsrc) {
 	})
 	decl=[], ref=[], declmap.clear(), maploc2i.clear()
 	void [...trav(ast)]
+	ref
+		.filter(x => x.decl === undefined && decl[declmap.get(x.id.name)]?.category === 'function')
+		.forEach(x => {
+			x.di = declmap.get(x.id.name)
+			x.decl = decl[x.di]
+			maploc2i.set(x.id.start, x.di)
+		})
 	return gen(ast)
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
