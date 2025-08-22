@@ -6,6 +6,7 @@ const [ container, containercode, buttons, output ] = (function (l) {
 	return l.map(x => creatediv(x))
 })([ 'container', 'containercode', 'buttons', 'output' ])
 
+output.style.whiteSpace = 'pre'
 container.appendChild(containercode)
 container.appendChild(buttons)
 container.appendChild(output)
@@ -46,6 +47,11 @@ async function getGithubSrc(url) {
 	return await res.text()
 }
 
+function fl(n, s) {
+	if (s === undefined) return s
+    return ' '.repeat(n - s.toString().length) + s
+}
+
 const querystring = document.location.href.split('?')
 var _src = srcgen
 void (async function main() {
@@ -59,9 +65,9 @@ void (async function main() {
 
 	output.innerText = decl.filter(x => x.category === 'function').map(x => [ x.name, x.loc.start.line, x.loc.start.column ]).join('\n')
 		+ '\n\n'
-		+ Object.values(Object.groupBy(ref.map(x => [`${x.id.name}: (${x.id.loc.start.line}, ${x.id.loc.start.column}) -> ${x.decl?.name}: (${x.decl?.loc.start.line}, ${x.decl?.loc.start.column})`, x.decl?.start]), l => l[1])).filter(x => x.length == 1).flatMap(x => x).map(x => x[0]+'\n').join('')
+		+ Object.values(Object.groupBy(ref.map(x => [`${x.id.name}: (${fl(3, x.id.loc.start.line)}, ${fl(3, x.id.loc.start.column)}) -> ${x.decl?.name}: (${fl(3, x.decl?.loc.start.line)}, ${fl(3, x.decl?.loc.start.column)})`, x.decl?.start]), l => l[1])).filter(x => x.length == 1).flatMap(x => x).map(x => x[0]+'\n').join('')
 		+ '\n\n'
-		+ Object.values(Object.groupBy(ref.map(x => [`${x.id.name}: (${x.id.loc.start.line}, ${x.id.loc.start.column}) -> ${x.decl?.name}: (${x.decl?.loc.start.line}, ${x.decl?.loc.start.column})`, x.decl?.start]), l => l[1])).flatMap(x => x).map(x => x[0]+'\n').join('')
+		+ Object.values(Object.groupBy(ref.map(x => [`${x.id.name}: (${fl(3, x.id.loc.start.line)}, ${fl(3, x.id.loc.start.column)}) -> ${x.decl?.name}: (${fl(3, x.decl?.loc.start.line)}, ${fl(3, x.decl?.loc.start.column)})`, x.decl?.start]), l => l[1])).flatMap(x => x).map(x => x[0]+'\n').join('')
 
 	//setTimeout(() => {
 	//	void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
