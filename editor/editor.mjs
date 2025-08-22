@@ -47,8 +47,9 @@ async function getGithubSrc(url) {
 }
 
 const querystring = document.location.href.split('?')
+var _src = srcgen
 void (async function main() {
-	const vresult = v(decorator1, (querystring[1] ? await getGithubSrc(querystring[1]): srcgen)
+	const vresult = v(decorator1, (querystring[1] ? _src = await getGithubSrc(querystring[1]): _src)
 		.replace(/\r/g, '')
 		.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
 	)
@@ -271,11 +272,11 @@ function setsrc(src) {
 function evalfunc(src, onlysyntaxcheck=false) {
 	try {
 		parse(src)
-		if (!onlysyntaxcheck) eval(src)
 		containercode.innerHTML = v(decorator1, src
 			.replace(/\r/g, '')
 			.replace(/(?<=\n)\s*\/\/.*?(?=\n)/g, '')
 		)
+		if (!onlysyntaxcheck) eval(src)
 	} catch (err) {
 		console.log(err)
 		containercode.innerHTML = containercode.innerHTML.replace(onlysyntaxcheck ? ':s' : ':eva',
