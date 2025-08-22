@@ -303,7 +303,7 @@ function _gen(n, il = 0, decorator) {
 		case 'DebuggerStatement':
 			return 'debugger'
 		case 'ExportNamedDeclaration':
-			return `export ${n.attributes.map(x => gen(x).join(' '))}${n.specifiers.map(x => gen(x)).join('')}${gen(n.declaration)}${n.source ? ` from ${n.source}` : ''}`
+			return `export ${n.attributes.map(x => gen(x).join(' '))}${n.specifiers.map(x => gen(x)).join('')}${n.declaration ? gen(n.declaration) : ''}${n.source ? ` from ${n.source}` : ''}`
 		default:
 			return `not implemented(${n?.type})${(decorator ? '<br>' : '\n')}${JSON.stringify(n, null, 8)}`
 			break
