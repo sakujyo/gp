@@ -197,6 +197,18 @@ const fontsizecontainercode = window.getComputedStyle(containercode).fontSize
 sheetkeyword.replaceSync([ 'function', 'const', 'return', ].map(fmap(iconmap, fontsizecontainercode)).join(''))
 document.adoptedStyleSheets = [ sheet, sheetkeyword, idsheet]
 
+containercode.oncompositionupdate = (e) => {
+	if (e.data.match(/:eval$/)) {
+		const m = containercode.innerText.match(/:eva/)
+		if (m) evalfunc(containercode.innerText.slice(0, m.index))
+	}
+	if (e.data.match(/:sc$/)) {
+		const m = containercode.innerText.match(/:s/)
+		output.innerText = `m.index: ${m.index}`
+		if (m) evalfunc(containercode.innerText.slice(0, m.index), true)
+	}
+}
+
 var keyacc = ''
 containercode.onkeydown = (e) => {
 	if (e.ctrlKey || e.altKey) return
