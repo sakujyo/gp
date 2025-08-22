@@ -24,7 +24,7 @@ function decorator1(text, className, stylingcolor=true, indent = false, borderco
 
 const declmap = new Map()
 function v(decorator1, targetsrc) {
-	ast = parse(targetsrc.replace(/</g, '</**/'), {
+	ast = parse(targetsrc.replace(/\/\*.*?\*\/()/gs, '').replace(/</g, '</**/'), {
 		sourceType: 'module',
 		errorRecovery: true,
 	})
@@ -302,6 +302,8 @@ function _gen(n, il = 0, decorator) {
 			return `${gen(n.tag)}${gen(n.quasi)}`
 		case 'DebuggerStatement':
 			return 'debugger'
+		case 'ExportNamedDeclaration':
+			return `export ${n.attributes.map(x => gen(x).join(' '))}${n.specifiers.map(x => gen(x)).join('')}${gen(n.declaration)}${n.source ? ` from ${n.source}` : ''}`
 		default:
 			return `not implemented(${n?.type})${(decorator ? '<br>' : '\n')}${JSON.stringify(n, null, 8)}`
 			break
