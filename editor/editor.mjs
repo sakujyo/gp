@@ -55,9 +55,10 @@ void (async function main() {
 	console.log(asobj)
 	setsrc(vresult)
 
-	setTimeout(() => {
-		void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
-	}, 99)
+	output.innerText = decl.filter(x => x.category === 'function').map(x => [ x.name, x.loc.start.line, x.loc.start.column ]).join('\n')
+	//setTimeout(() => {
+	//	void ([...document.querySelectorAll('div')].filter(x => x.scrollWidth > 29200)[3].innerText='')
+	//}, 99)
 
 	setTimeout(() => {
 		observer = new IntersectionObserver(entries => {
@@ -220,8 +221,6 @@ containercode.onkeydown = (e) => {
 			break
 	}
 }
-
-output.innerText = decl.filter(x => x.category === 'function').map(x => [ x.name, x.loc.start.line, x.loc.start.column ]).join('\n')
 
 const cl = [ '#f57', '#b7f', '#4e8', '#fe2', '#17f', ]
 function c() {
