@@ -63,7 +63,6 @@ function* trav(n, depth=0) {
 					if (e.id) e.id.category = 'function'
 					e.id && declpush(e.id) // function name
 
-
 					for (const x of e.params) {
 						if (x.type === 'Identifier')
 							declpush(x)
@@ -147,7 +146,7 @@ function _gen(n, il = 0, decorator) {
 			return n.value.raw
 		case 'Identifier':
 			const i = maploc2i.get(n.start)
-			return df(i ? `gr${i % 7} id${i}` : 'external')(n.name)
+			return df(i !== undefined ? `gr${i % 7} id${i}` : 'external')(n.name)
 		case 'NumericLiteral':
 		case 'StringLiteral':
 			return n.extra.raw
