@@ -198,14 +198,14 @@ sheetkeyword.replaceSync([ 'function', 'const', 'return', ].map(fmap(iconmap, fo
 document.adoptedStyleSheets = [ sheet, sheetkeyword, idsheet]
 
 containercode.addEventListener('compositionend',  (e) => {
-	output.innerText = `m.index: ${m.index}`
+	output.innerText = `e.data: ${e.data}\n`
 	if (e.data.match(/:eval$/)) {
 		const m = containercode.innerText.match(/:eva/)
 		if (m) evalfunc(containercode.innerText.slice(0, m.index))
 	}
 	if (e.data.match(/:sc$/)) {
 		const m = containercode.innerText.match(/:s/)
-		output.innerText = `m.index: ${m.index}`
+		output.innerText += `m.index: ${m.index}\n`
 		if (m) evalfunc(containercode.innerText.slice(0, m.index), true)
 	}
 })
