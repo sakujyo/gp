@@ -24,7 +24,7 @@ function decorator1(text, className, stylingcolor=true, indent = false, borderco
 
 const declmap = new Map()
 function v(decorator1, targetsrc) {
-	ast = parse(targetsrc.replace(/\/\*.*?\*\/()/gs, '').replace(/</g, '</**/'), {
+	ast = parse(targetsrc.replace(/\/\*.*?\*\/()/gs, '').replace(/<(?!=)/g, '</**/'), {
 		sourceType: 'module',
 		errorRecovery: true,
 	})
