@@ -183,7 +183,7 @@ function _gen(n, il = 0, decorator) {
 			return df('func', true, true)(`${
 				n.static ? 'static ' : ''}${
 					n.async ? 'async ' : ''}${
-						''/*n.kind !== 'method' ? `${n.kind} ` : ''*/}${
+						n.kind !== 'method' && n.kind !== 'constructor' ? `${n.kind} ` : ''}${
 							n.generator ? '* ' : ''}${
 								n.computed ? `[${gen(n.key)}]` : `${gen(n.key)}`}(${
 									n.params.map(x => gen(x)).join(', ')}) ${
