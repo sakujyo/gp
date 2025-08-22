@@ -200,13 +200,18 @@ document.adoptedStyleSheets = [ sheet, sheetkeyword, idsheet]
 containercode.addEventListener('compositionend',  (e) => {
 	output.innerText = `e.data: ${e.data}\n`
 	if (e.data.match(/:eval$/)) {
-		const m = containercode.innerText.match(/:eva/)
+		const m = containercode.innerText.match(/:eval/)
 		if (m) evalfunc(containercode.innerText.slice(0, m.index))
 	}
 	if (e.data.match(/:sc$/)) {
-		const m = containercode.innerText.match(/:s/)
+		const m = containercode.innerText.match(/:sc/)
 		output.innerText += `m.index: ${m.index}\n`
 		if (m) evalfunc(containercode.innerText.slice(0, m.index), true)
+	}
+	if (e.data.match(/関数$/)) {
+		const el = e.target
+		const m = el.innerText.match(/関数/)
+		if (m) evalfunc(el.innerText.replace(/関数/, 'function _() {\n}', true)
 	}
 })
 
