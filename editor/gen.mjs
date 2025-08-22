@@ -32,7 +32,7 @@ function v(decorator1, targetsrc) {
 		sourceType: 'module',
 		errorRecovery: true,
 	})
-	decl=[],ref=[]
+	decl=[], ref=[], declmap.clear(), maploc2i.clear()
 	void [...trav(ast)]
 	return gen(ast)
 		.replace(/</g, '&lt;')
@@ -55,7 +55,7 @@ function* trav(n, depth=0) {
 		if (e && typeof e === 'object') {
 			switch (e.type) {
 				case 'VariableDeclarator':
-					declpush(e.id)
+					if (e.id.type === 'Identifier') declpush(e.id)
 					break
 				case 'FunctionDeclaration':
 				case 'FunctionExpression':
@@ -79,7 +79,7 @@ function* trav(n, depth=0) {
 						{
 							id: e,
 							di: i,
-							decl: i ? decl[i] : undefined,
+							decl: i !== undefined ? decl[i] : undefined,
 						}
 					)
 					maploc2i.set(e.start, i)

@@ -63,7 +63,7 @@ void (async function main() {
 	//}, 99)
 
 	setTimeout(() => {
-		observer = new IntersectionObserver(entries => {
+		const observer = new IntersectionObserver(entries => {
 			const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 			async function raf(timestamp) {
 				await sleep((((timestamp - Math.floor(timestamp)) * 1000 * 10) % 667) / 10)
