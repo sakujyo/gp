@@ -176,16 +176,6 @@ function generateanimation(n) {
 100%{background-color:hsl(0,100%,50%);}}`
 }
 
-function rainbow(n) {
-	return [
-		'#00e5ff', '#40acf9',
-		'#8073f2', '#bf39ec',
-		'#ff00e5', '#f940ac',
-		'#f28073', '#ecbf39',
-		'#e5ff00', '#acf940',
-		'#73f280', '#39ecbf'
-	][n % 12]
-}
 var tickCount = 0
 const preparedStylesCount = 12
 
