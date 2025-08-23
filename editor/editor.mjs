@@ -112,11 +112,6 @@ function styleid(x) {
 	}"; font-size:${'20px'};}` : ''
 }
 
-
-function randomcolor() {
-	const f = () => '9abc'[Math.floor(Math.random() * 4)]
-	return `#${f()}${f()}${f()}`
-}
 function generateanimation(n) {
 
 	return `
@@ -276,7 +271,7 @@ function evalfunc(src, onlysyntaxcheck=false) {
 		)
 	}
 }
-var tid
+//var tid
 
 function ce(elementType) {
 	return document.createElement(elementType)
