@@ -76,15 +76,6 @@ void (async function main() {
 	setTimeout(() => {
 		const observer = new IntersectionObserver(entries => {
 			const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-			async function raf(timestamp) {
-				await sleep((((timestamp - Math.floor(timestamp)) * 1000 * 10) % 667) / 10)
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						entry.target.style.animationIterationCount = 'infinite'
-					} else
-						entry.target.style.animationIterationCount = 1
-				});
-			}
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
 					entry.target.style.animationIterationCount = 'infinite' 
