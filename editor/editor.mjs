@@ -176,12 +176,12 @@ function generateanimation(n) {
 100%{background-color:hsl(0,100%,50%);}}`
 }
 
-var tickCount = 0
-const preparedStylesCount = 12
+//var tickCount = 0
+//const preparedStylesCount = 12
 
 var idsheet = new CSSStyleSheet()
 idsheet.replaceSync(Object.keys([...Array(7)]).map(x => generateanimation(parseInt(x))).join('\n'))
-const initialStyleSheets = [...document.adoptedStyleSheets]
+//const initialStyleSheets = [...document.adoptedStyleSheets]
 
 document.body.appendChild(container)
 
