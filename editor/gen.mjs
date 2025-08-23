@@ -232,7 +232,6 @@ function _gen(n, il = 0, decorator) {
 			const init = n.init ? gen(n.init) : '';
 			const test = n.test ? gen(n.test) : '';
 			const update = n.update ? gen(n.update) : '';
-			const body = gen(n.body, n.body.type === 'BlockStatement' ? il : il + 1);
 			return `for (${init}; ${test}; ${update}) ${gen(n.body, il + 1)}`
 		case 'ForOfStatement':
 			return `for ${n.await ? 'await ' : ''}(${gen(n.left)} of ${gen(n.right)}) ${gen(n.body, il + 1)}`
