@@ -92,8 +92,6 @@ void (async function main() {
 	}, 500)
 })()
 
-var idcolor = 'white'
-
 const segmenter = new Intl.Segmenter('ja', {
 	granularity: 'grapheme',
 })
