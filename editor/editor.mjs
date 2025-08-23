@@ -106,11 +106,6 @@ const translationid = {
 	args: '📚',
 }
 const ccfontsize = window.getComputedStyle(containercode).fontSize
-function styleid(x) {
-	return decl[x].name in translationid ? `.id${x}::before { content: "${
-		translationid[decl[x].name]
-	}"; font-size:${'20px'};}` : ''
-}
 
 function generateanimation(n) {
 
