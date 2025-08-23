@@ -224,11 +224,6 @@ containercode.onkeydown = (e) => {
 	}
 }
 
-const cl = [ '#f57', '#b7f', '#4e8', '#fe2', '#17f', ]
-function c() {
-	return cl[Math.floor(Math.random() * cl.length)]
-}
-
 function setsrc(src) {
 	containercode.innerHTML = src
 	setTimeout(() => {
